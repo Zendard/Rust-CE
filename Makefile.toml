@@ -1,6 +1,6 @@
 [env]
 # Path to CE Toolchain files
-CEDEV = "/opt/CEdev"
+CEDEV = "/usr/local/bin/CEdev"
 # Name to display in calculator
 EXECUTABLE_NAME = "DEMO"
 
@@ -82,16 +82,18 @@ args = [
 [tasks.compile_asm]
 command = "${CEDEV}/bin/fasmg"
 args = [
-    "-n", 
     '${CEDEV}/meta/ld.alm', 
     "-i", 'DEBUG := 0', 
-    '-i', 'STATIC := 1', 
+    "-i", 'HAS_PRINTF := 1', 
+    # '-i', 'STATIC := 1', 
+    '-i', 'HAS_LIBC := 1',
+    '-i', 'HAS_LIBCXX := 0',
     '-i', 'include "${CEDEV}/meta/linker_script"', 
     '-i', 'range .bss $D031F6 : $D13FD6', 
     '-i', 'provide __stack = $D1A87E', 
     '-i', 'locate .header at $D1A87F', 
-    '-i', 'require __cleanup',  
-    '-i', 'source "${CEDEV}/lib/shared/crt0.src", "./incremental/${CARGO_MAKE_PROJECT_NAME}.s"', 
+    # '-i', 'require __cleanup',  
+    '-i', 'source "${CEDEV}/lib/crt/crt0.src", "./incremental/${CARGO_MAKE_PROJECT_NAME}.s"', 
     'incremental/${CARGO_MAKE_PROJECT_NAME}.bin'
 ]
 
